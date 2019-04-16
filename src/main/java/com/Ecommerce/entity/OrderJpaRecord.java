@@ -35,6 +35,7 @@ public class OrderJpaRecord implements Serializable {
 	// ENTITY PRIMARY KEY ( BASED ON A SINGLE FIELD )
 	// ----------------------------------------------------------------------
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "order_id", nullable = false)
 	private Integer orderId;
 

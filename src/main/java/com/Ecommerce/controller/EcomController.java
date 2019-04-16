@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Ecommerce.entity.ItemJpaRecord;
+import com.Ecommerce.entity.OrderJpaRecord;
 import com.Ecommerce.service.EcomService;
 
 @RestController
@@ -55,7 +56,7 @@ public class EcomController {
 		boolean flag = false;
 		if (ijr != null) {
 			if (!ecomService.checkItem(ijr.getItemId())) {
-				return "There is no item present with the given id and name";
+				return "No Item exists";
 			}
 			ItemJpaRecord i = ecomService.insertItems(ijr);
 			if (i != null) {
@@ -77,4 +78,5 @@ public class EcomController {
 		}
 		return "Deleted Successfully";
 	}
+
 }
