@@ -1,0 +1,12 @@
+create database ecom;
+create table ecom.public.item (item_id int primary key,item_name varchar,quantity int,allocated int);
+create table ecom.public.oder (order_id int primary key,email_id varchar);
+create table ecom.public.order_details (order_detail_id int,item_id int,item_name varchar,quantity int,foreign key(order_detail_id) references ecom.public.oder(order_id));
+
+
+insert into ecom.public.item values(1,'Phone',15,0);
+insert into ecom.public.item values(2,'Laptop',15,0);
+insert into ecom.public.item values(3,'Ear phones',15,0);
+insert into ecom.public.item values(4,'TV',15,0);
+insert into ecom.public.item values(5,'AC',15,0);
+
