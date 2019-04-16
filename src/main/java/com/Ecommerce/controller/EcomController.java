@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Ecommerce.Repo.OderRepository;
+import com.Ecommerce.Repo.OrderDetailsRepository;
 import com.Ecommerce.entity.ItemJpaRecord;
-import com.Ecommerce.entity.OrderJpaRecord;
+import com.Ecommerce.entity.OderJpaRecord;
+import com.Ecommerce.entity.OrderDetailsJpaRecord;
+import com.Ecommerce.entity.OrderInfo;
 import com.Ecommerce.service.EcomService;
 
 @RestController
@@ -20,6 +23,13 @@ public class EcomController {
 
 	@Autowired
 	EcomService ecomService;
+	
+	@Autowired
+	OrderDetailsRepository orderDetailsRepository;
+
+	@Autowired
+	OderRepository orderRepository;
+	
 
 	@RequestMapping("/getAllItems")
 	public List<ItemJpaRecord> getAllItems() {
@@ -78,5 +88,42 @@ public class EcomController {
 		}
 		return "Deleted Successfully";
 	}
+	
+	
+	 @RequestMapping("/OrderItem") 
+	 public String orderItem(@RequestBody OrderInfo Oi) { 
+		 boolean flag=ecomService.orderItem(Oi); 
+		 if(flag)
+		 {
+			 return "Order successful";
+		 }
+		 
+		 else return "Order un successful";
+		 }
+	 
+	 @RequestMapping("/CancelOrder") 
+	 public String CancelOrder(@RequestBody OrderDetailsJpaRecord Oi) { 
+		 boolean flag=ecomService.cancelOrder(Oi); 
+		 if(flag)
+		 {
+			 return "Cancel successful";
+		 }
+		 
+		 else return "Cancel un successful";
+		 }
+	 
+	 @RequestMapping("/UpdateOrder") 
+	 public String updateOrder(@RequestBody OrderDetailsJpaRecord Oi) { 
+		 boolean flag=ecomService.updateOrder(Oi); 
+		 if(flag)
+		 {
+			 return "Update successful";
+		 }
+		 
+		 else return "Update un successful";
+		 }
+	 
+
+	 
 
 }

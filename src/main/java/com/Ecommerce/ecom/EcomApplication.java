@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration*/
 @EnableAutoConfiguration()
 @ComponentScan(basePackages= {"com"})
-@EntityScan(basePackages= {"com.Ecommerce.entity"})
+@EntityScan(basePackages= {"com"})
 @EnableJpaRepositories(basePackages= {"com.Ecommerce.Repo"})
 @SpringBootApplication
 public class EcomApplication {

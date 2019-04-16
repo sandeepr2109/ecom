@@ -7,13 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Ecommerce.Repo.ItemRepository;
+import com.Ecommerce.Repo.OderRepository;
 import com.Ecommerce.Repo.OrderDetailsRepository;
-import com.Ecommerce.Repo.OrderInfoRepository;
-import com.Ecommerce.Repo.OrderRepository;
 import com.Ecommerce.entity.ItemJpaRecord;
+import com.Ecommerce.entity.OderJpaRecord;
 import com.Ecommerce.entity.OrderDetailsJpaRecord;
 import com.Ecommerce.entity.OrderInfo;
-import com.Ecommerce.entity.OrderJpaRecord;
 
 @Service
 public class EcomService {
@@ -25,11 +24,12 @@ public class EcomService {
 	OrderDetailsRepository orderDetailsRepository;
 
 	@Autowired
-	OrderRepository orderRepository;
+	OderRepository orderRepository;
 	
-	@Autowired
-	OrderInfoRepository orderInfoRepository;
-
+	
+	
+	
+	
 	public List<ItemJpaRecord> getAllItems() {
 		return itemRepository.findAll();
 	}
@@ -50,20 +50,75 @@ public class EcomService {
 		itemRepository.deleteById(id);
 	}
 
-	public List<OrderInfoRepository> listAllOrders() {
-		return orderInfoRepository.findAll();
-	}
-
-	public Optional<OrderInfoRepository> getOrder(int id) {
-		return orderInfoRepository.findById(id);
-	}
-
-	public boolean checkOrder(int id) {
-		return orderInfoRepository.existsById(id);
-	}
 	
 	public void cancelOrder(int id) {
 		orderRepository.deleteById(id);
 	}
+	
+	
+	 public boolean orderItem(OrderInfo Oi) {
+		 boolean data=false;
+		 if(Oi !=null) {
+			 ItemJpaRecord j=itemRepository.findById(Oi.getItemId()).orElse(null);
+				int alloc=j.getQuantity()-j.getAllocated();
+				int newalloc=j.getAllocated()+Oi.getQuantity();
+				if(Oi.getQuantity()<=alloc) {
+	 System.out.println("======================="+orderRepository.count()); 
+	 long count=orderRepository.count()+1;
+	 Long l=new Long(count);
+	 Oi.setOrderId(l.intValue());
+	 OderJpaRecord oderJpaRecord=new OderJpaRecord();
+	 oderJpaRecord.setEmailId(Oi.getEmailId());			
+	 oderJpaRecord.setOrderId(Oi.getOrderId());
+	 orderRepository.save(oderJpaRecord);	
+	 OrderDetailsJpaRecord orderDetailsJpaRecord= new OrderDetailsJpaRecord();
+	 orderDetailsJpaRecord.setOrderDetailId(l.intValue());
+	 orderDetailsJpaRecord.setItemId(Oi.getItemId());
+	 orderDetailsJpaRecord.setItemName(Oi.getItemName());
+	 orderDetailsJpaRecord.setQuantity(Oi.getQuantity());
+	 orderDetailsJpaRecord.setAllocated(Oi.getQuantity());		 
+	orderDetailsRepository.save(orderDetailsJpaRecord);	
+	j.setAllocated(newalloc);
+	itemRepository.save(j);
+	data=true;}
+		 }
+		 return data;
+	 }
+	 
+	 public boolean cancelOrder(OrderDetailsJpaRecord Oi)
+	 {
+		 boolean flag=false;
+		 if(Oi!=null)
+		 {
+			 ItemJpaRecord j=itemRepository.findById(Oi.getItemId()).orElse(null);
+			 int t=j.getAllocated()-Oi.getAllocated();
+			 j.setAllocated(t);
+			 itemRepository.save(j);
+			 orderDetailsRepository.deleteById(Oi.getOrderDetailId());
+			 orderRepository.deleteById(Oi.getOrderDetailId());
+			 flag=true;
+		 }
+		 return flag;
+	 }
+	 
+	 
+	 public boolean updateOrder(OrderDetailsJpaRecord Oi)
+	 {
+		 boolean flag=false;
+		 if(Oi !=null) {
+			 ItemJpaRecord j=itemRepository.findById(Oi.getItemId()).orElse(null);
+			 OrderDetailsJpaRecord k=orderDetailsRepository.findById(Oi.getItemId()).orElse(null);
+				int alloc=j.getQuantity()-j.getAllocated()+k.getAllocated();
+				int newalloc=alloc-Oi.getQuantity();
+				if(Oi.getQuantity()<=alloc) {	
+					 j.setAllocated(newalloc);
+					 orderDetailsRepository.save(Oi);
+					 itemRepository.save(j);
+						
+				}
+				flag=true;
+				}
+		 return flag;
+	 }
 
 }

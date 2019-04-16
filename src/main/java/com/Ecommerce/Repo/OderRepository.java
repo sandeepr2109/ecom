@@ -8,13 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import com.Ecommerce.entity.OrderJpaRecord;
+import com.Ecommerce.entity.OderJpaRecord;
 
 
 
 /**
  * Spring data Jpa repository for "Oder" <br>
+ * @author Telosys (http://www.telosys.org/) version 3.0.0
  */
 @Repository
-public interface OrderRepository extends JpaRepository<OrderJpaRecord, Integer>, JpaSpecificationExecutor<OrderJpaRecord> {
+public interface OderRepository extends JpaRepository<OderJpaRecord, Integer>, JpaSpecificationExecutor<OderJpaRecord> {
 }
